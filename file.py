@@ -3,8 +3,6 @@ from urllib.parse import urlencode
 from json import loads
 
 def report(apikey, resource):
-	'''Retrieve file scan reports
-	return type is dictionary'''
 	url = 'https://www.virustotal.com/vtapi/v2/file/report'
 	params = {'apikey': apikey, 'resource': resource}
 	data = urlencode(params).encode('ascii')
