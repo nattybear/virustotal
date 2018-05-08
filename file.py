@@ -11,8 +11,7 @@ def report(apikey, resource):
 	code = res.getcode()
 
 	if code != 200:
-		print('Status code is not 200')
-		exit()
+		return 'Status code is not 200'
 
 	json = res.read().decode('utf-8')
 	res.close()
