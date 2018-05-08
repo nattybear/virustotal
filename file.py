@@ -8,11 +8,6 @@ def report(apikey, resource):
 	data = urlencode(params).encode('ascii')
 	req = Request(url, data=data)
 	res = urlopen(req)
-	code = res.getcode()
-
-	if code != 200:
-		return 'Status code is not 200'
-
 	json = res.read().decode('utf-8')
 	res.close()
 	return loads(json)
