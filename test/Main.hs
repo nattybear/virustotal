@@ -1,11 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
 
-import Control.Monad (unless)
-import Data.Aeson (Value (..), Result (..), fromJSON, object, (.=), eitherDecode')
+import           Control.Monad     (unless)
+import           Data.Aeson        (Result (..), Value (..), eitherDecode',
+                                    fromJSON, object, (.=))
 import qualified Data.Aeson.KeyMap as KeyMap
-import HttpTests (httpTests)
-import VirusTotal
+import           HttpTests         (httpTests)
+import           VirusTotal
 
 main :: IO ()
 main = do
@@ -46,7 +47,7 @@ main = do
   rejects "negative votes" (withAttr "total_votes" (object
     ["harmless" .= (0 :: Int), "malicious" .= (-1 :: Int)]))
   case eitherDecode' "{broken" :: Either String IpReport of
-    Left _ -> pure ()
+    Left _  -> pure ()
     Right _ -> fail "malformed JSON accepted"
   putStrLn "All 24 IP report parsing tests passed."
   httpTests
@@ -72,7 +73,7 @@ stats malicious = object
 withAttr :: KeyMap.Key -> Value -> Value
 withAttr key value = case attributes of
   Object attrs -> report "192.0.2.1" (Object (KeyMap.insert key value attrs))
-  _ -> error "Expected object fixture"
+  _            -> error "Expected object fixture"
 
 expected :: IpReport
 expected = IpReport "192.0.2.1" (Just (-10)) (Just (CommunityVotes 1 2))
@@ -89,5 +90,5 @@ accepts label value wanted = case fromJSON value of
 
 rejects :: String -> Value -> IO ()
 rejects label value = case fromJSON value :: Result IpReport of
-  Error _ -> pure ()
+  Error _   -> pure ()
   Success _ -> fail (label ++ ": unexpectedly accepted")

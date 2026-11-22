@@ -12,57 +12,58 @@ module VirusTotal
   , CommunityVotes (..)
   ) where
 
-import Control.Exception (catch)
-import Data.IP (IP)
-import qualified Data.Text as Text
-import qualified Data.Text.Encoding as Text
-import qualified Network.HTTP.Client as HTTP
-import Network.HTTP.Client.TLS (tlsManagerSettings)
-import Network.HTTP.Types (statusCode, urlEncode)
-import Text.Read (readMaybe)
-import Data.Aeson (eitherDecode', FromJSON (..), withObject, (.:), (.:?))
-import Data.Aeson.Types (Parser)
-import Data.Text (Text)
-import Numeric.Natural (Natural)
+import           Control.Exception       (catch)
+import           Data.Aeson              (FromJSON (..), eitherDecode',
+                                          withObject, (.:), (.:?))
+import           Data.Aeson.Types        (Parser)
+import           Data.IP                 (IP)
+import           Data.Text               (Text)
+import qualified Data.Text               as Text
+import qualified Data.Text.Encoding      as Text
+import qualified Network.HTTP.Client     as HTTP
+import           Network.HTTP.Client.TLS (tlsManagerSettings)
+import           Network.HTTP.Types      (statusCode, urlEncode)
+import           Numeric.Natural         (Natural)
+import           Text.Read               (readMaybe)
 
 -- | An IP address report, decoded from the complete API response envelope.
 -- Unknown fields are ignored. Missing or null attributes become 'Nothing',
 -- preserving the distinction between unavailable information and a zero value.
 -- The ID is retained as text; this parser does not validate IP syntax.
 data IpReport = IpReport
-  { ipAddress :: Text
+  { ipAddress           :: Text
     -- ^ Report ID (IPv4 or IPv6 address).
-  , ipReputation :: Maybe Integer
+  , ipReputation        :: Maybe Integer
     -- ^ Community score: negative indicates malicious votes, positive harmless.
     -- This is separate from scanner verdict counts.
-  , ipTotalVotes :: Maybe CommunityVotes
+  , ipTotalVotes        :: Maybe CommunityVotes
     -- ^ Unweighted community votes.
   , ipLastAnalysisStats :: Maybe AnalysisStats
     -- ^ Scanner verdict counts. Undetected means no opinion, not harmless.
-  , ipLastAnalysisDate :: Maybe Integer
+  , ipLastAnalysisDate  :: Maybe Integer
     -- ^ Last analysis time as Unix seconds in UTC.
-  , ipCountry :: Maybe Text
+  , ipCountry           :: Maybe Text
     -- ^ Country code.
-  , ipAsn :: Maybe Natural
+  , ipAsn               :: Maybe Natural
     -- ^ Autonomous system number.
-  , ipAsOwner :: Maybe Text
+  , ipAsOwner           :: Maybe Text
     -- ^ Autonomous system owner.
   } deriving (Eq, Show)
 
 -- | Nonnegative scanner verdict counts. All five documented fields are
 -- required when the statistics object is present; unknown fields are ignored.
 data AnalysisStats = AnalysisStats
-  { analysisHarmless :: Natural
-  , analysisMalicious :: Natural
+  { analysisHarmless   :: Natural
+  , analysisMalicious  :: Natural
   , analysisSuspicious :: Natural
-  , analysisTimeout :: Natural
+  , analysisTimeout    :: Natural
   , analysisUndetected :: Natural
   } deriving (Eq, Show)
 
 -- | Nonnegative, unweighted community vote counts. Both fields are required
 -- when the votes object is present.
 data CommunityVotes = CommunityVotes
-  { votesHarmless :: Natural
+  { votesHarmless  :: Natural
   , votesMalicious :: Natural
   } deriving (Eq, Show)
 

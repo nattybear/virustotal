@@ -1,15 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 module HttpTests (httpTests) where
 
-import Control.Exception (AsyncException (..), throwIO, try)
-import Control.Monad (unless)
-import Data.Aeson (encode, object, (.=))
-import qualified Data.ByteString.Lazy as Lazy
-import qualified Network.HTTP.Client as HTTP
-import qualified Network.HTTP.Types as Status
-import qualified Network.Wai as Wai
-import Network.Wai.Handler.Warp (testWithApplication)
-import VirusTotal
+import           Control.Exception        (AsyncException (..), throwIO, try)
+import           Control.Monad            (unless)
+import           Data.Aeson               (encode, object, (.=))
+import qualified Data.ByteString.Lazy     as Lazy
+import qualified Network.HTTP.Client      as HTTP
+import qualified Network.HTTP.Types       as Status
+import qualified Network.Wai              as Wai
+import           Network.Wai.Handler.Warp (testWithApplication)
+import           VirusTotal
 
 httpTests :: IO ()
 httpTests = do

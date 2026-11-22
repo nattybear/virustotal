@@ -15,7 +15,7 @@ homepage: https://github.com/nattybear/virustotal
 bug-reports: https://github.com/nattybear/virustotal/issues
 build-type: Simple
 tested-with: GHC == 9.8.4
-extra-source-files: README.md, CHANGELOG.md
+extra-source-files: README.md, CHANGELOG.md, .stylish-haskell.yaml
 
 source-repository head
   type: git
